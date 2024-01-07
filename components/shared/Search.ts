@@ -1,14 +1,14 @@
-// "use client"
+ "use client"
 
-// import Image from 'next/image';
-// import { useEffect, useState } from 'react'
+ import Image from 'next/image';
+ import { useEffect, useState } from 'react'
 // import { Input } from '../ui/input';
-// import { useRouter, useSearchParams } from 'next/navigation';
+ import { useRouter, useSearchParams } from 'next/navigation';
 
-// const Search = ({ placeholder = 'Search title...' }: { placeholder?: string }) => {
-//   const [query, setQuery] = useState('');
-//   const router = useRouter();
-//   const searchParams = useSearchParams();
+ const Search = ({ placeholder = 'Search title...' }: { placeholder?: string }) => {
+   const [query, setQuery] = useState('');
+   const router = useRouter();
+   const searchParams = useSearchParams();
 
 //   useEffect(() => {
 //     const delayDebounceFn = setTimeout(() => {
@@ -46,4 +46,4 @@
 //   )
 // }
 
-// export default Search
+ export default Search
