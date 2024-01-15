@@ -1,9 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-
 import Event from '../database/models/event.model'
-
 import {
   
   UpdateEventParams,

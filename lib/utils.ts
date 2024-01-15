@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import qs from "query-string";
-import { UrlQueryParams, RemoveUrlQueryParams } from "../types";
+import { RemoveUrlQueryParams, UrlQueryParams } from "../types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -84,7 +84,7 @@ export function removeKeysFromQuery({
 }: RemoveUrlQueryParams) {
   const currentUrl = qs.parse(params);
 
-  keysToRemove.forEach((key: string | number) => {
+  keysToRemove.forEach((key) => {
     delete currentUrl[key];
   });
 
