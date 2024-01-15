@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache'
 import Event from '../database/models/event.model'
 import {
-  
   UpdateEventParams,
   DeleteEventParams,
   GetAllEventsParams,
@@ -96,7 +95,10 @@ export async function deleteEvent({ eventId, path }: DeleteEventParams) {
 // GET ALL EVENTS
 export async function getAllEvents({ query, limit = 6, page, category }: GetAllEventsParams) {
   try {
+    console.log("************Creating event from event.actions.ts 98");
+
     await connectToDatabase()
+    console.log("Creating event from event.actions.ts");
 
     const titleCondition = query ? { title: { $regex: query, $options: 'i' } } : {}
     const categoryCondition = category ? await getCategoryByName(category) : null
