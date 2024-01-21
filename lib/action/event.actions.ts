@@ -35,6 +35,8 @@ export async function createEvent({ userId, event, path }: CreateEventParams) {
     await connectToDatabase();
 
     console.log("Creating event from event.actions.ts");
+    console.log("userId", userId);
+    
 
     const organizer = await User.findById(userId);
     console.log("organizer", organizer);
