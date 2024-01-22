@@ -34,13 +34,9 @@ export async function createEvent({ userId, event, path }: CreateEventParams) {
   try {
     await connectToDatabase();
 
-    console.log("Creating event from event.actions.ts");
-    console.log("userId", userId);
-    
-
     const organizer = await User.findById(userId);
     console.log("organizer", organizer);
-    
+
     if (!organizer) throw new Error("Organizer not found");
 
     const newEvent = await Event.create({
@@ -115,8 +111,6 @@ export async function getAllEvents({
 }: GetAllEventsParams) {
   try {
     await connectToDatabase();
-    console.log("Creating event from event.actions.ts");
-
     const titleCondition = query
       ? { title: { $regex: query, $options: "i" } }
       : {};
