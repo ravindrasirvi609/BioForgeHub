@@ -11,6 +11,8 @@ import { getEventsByUser } from "../../../lib/action/event.actions";
 const ProfilePage = async ({ searchParams }: SearchParamProps) => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
+  console.log("User ID: ", userId);
+
   const ordersPage = Number(searchParams?.ordersPage) || 1;
   const eventsPage = Number(searchParams?.eventsPage) || 1;
   const orders = await getOrdersByUser({ userId, page: ordersPage });
