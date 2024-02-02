@@ -64,10 +64,8 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
       if (!uploadedImages) {
         return;
       }
-
       uploadedImageUrl = uploadedImages[0].url;
     }
-
     if (type === "Create") {
       try {
         const newEvent = await createEvent({
