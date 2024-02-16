@@ -12,6 +12,8 @@ const UpdateEvent = async ({ params: { id } }: UpdateEventProps) => {
   const { sessionClaims } = auth();
 
   const userId = sessionClaims?.userId as string;
+  console.log("-------",userId);
+  
   const event = await getEventById(id);
 
   return (
