@@ -49,9 +49,12 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
   }
 };
 
-export const createOrder = async (order: CreateOrderParams) => {
+export const createOrder = async (order: any) => {
   try {
+    console.log("order ************", order);
+
     await connectToDatabase();
+console.log("order ************", order);
 
     const newOrder = await Order.create({
       ...order,
