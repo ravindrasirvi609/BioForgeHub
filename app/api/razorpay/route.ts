@@ -23,18 +23,13 @@ export async function POST(req: NextRequest) {
     };
     try {
       const response = await razorpay.orders.create(options);
-      const data = {
-        id: response.id,
-        currency: response.currency,
-        amount: response.amount,
-      };
       return NextResponse.json({
         id: response.id,
         currency: response.currency,
         amount: response.amount,
       });
     } catch (err) {
-      console.log(err);
+      handleError(err);
     }
   }
 }

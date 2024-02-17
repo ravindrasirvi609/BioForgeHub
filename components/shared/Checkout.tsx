@@ -44,7 +44,7 @@ const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
 
     try {
       const payload = {
-        amount: Number(event.price) * 100, // Convert to paisa
+        amount: Number(event.price),
         currency: "INR",
         payment_capture: 1,
       };
@@ -88,11 +88,11 @@ const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
 
   return (
     <form onSubmit={onCheckout}>
-            {paymentInitialized && (
-      <Button type="submit" role="link" size="lg" className="button sm:w-fit">
-        {event.isFree ? "Get Ticket" : "Buy Ticket"}
-      </Button>
-    )}
+      {paymentInitialized && (
+        <Button type="submit" role="link" size="lg" className="button sm:w-fit">
+          {event.isFree ? "Get Ticket" : "Buy Ticket"}
+        </Button>
+      )}
     </form>
   );
 };
