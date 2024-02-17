@@ -1,13 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IEvent } from "../../lib/database/models/event.model";
 import { Button } from "../ui/button";
 import { checkoutOrder } from "../../lib/action/order.actions";
-import { createRazorpay } from "../../app/api/rozorpay/route";
+import axios from "axios";
+
+const initializeRazorpay = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+
+      document.body.appendChild(script);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
 const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
   const onCheckout = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("event", event);
 
     const order = {
       eventTitle: event.title,
@@ -18,22 +37,32 @@ const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
     };
 
     try {
-      await checkoutOrder(order);
+      const payload = {
+        amount: Number(event.price) * 100, // Convert to paisa
+        currency: "INR",
+        payment_capture: 1,
+      };
 
-      const data = await createRazorpay(order)
-      console.log(data);
-      var options = {
+      const response = await axios.post("/api/razorpay", payload);
+      console.log("response", response);
+
+      if (!response) {
+        throw new Error("API request failed");
+      }
+
+      const data = await response.data;
+
+      const options = {
         key: process.env.RAZORPAY_KEY,
         name: "Operant Scientific Private limited",
-        currency: data.currency as string,
-        amount: data.amount as number,
-        order_id: data.id as string,
+        currency: data.currency,
+        amount: data.amount,
+        order_id: data.id, // Use order ID from response
         description: "Thank you for your test donation",
         image: "/assets/icons/logo.svg",
         handler: function (response: any) {
-          alert(response.razorpay_payment_id);
-          alert(response.razorpay_order_id);
-          alert(response.razorpay_signature);
+          // Handle payment success
+          console.log("Payment successful:", response);
         },
         prefill: {
           name: "Ravindra",
@@ -45,7 +74,8 @@ const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
       const paymentObject = new (window as any).Razorpay(options);
       paymentObject.open();
     } catch (error) {
-      console.error("Error checking out:", error);
+      console.error("Error making payment:", error);
+      // Handle errors gracefully
     }
   };
 
