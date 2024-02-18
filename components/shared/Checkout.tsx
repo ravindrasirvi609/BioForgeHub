@@ -35,7 +35,18 @@ const Checkout: React.FC<CheckoutProps> = ({ event, userId }) => {
     
     if (event.isFree) {
       alert("Checkout has already been initialized");
-      setError("Checkout is not available for free events");
+      const order = {
+        razorpayId: "FREE",
+        totalAmount: 0,
+        currency: "INR",
+        eventId: event._id,
+        buyerId: userId,
+        createdAt: new Date(),
+        status: "success",
+      };
+      console.log("Order:", order);
+
+      const newOrder = await createOrder(order);
       return;
     }
 

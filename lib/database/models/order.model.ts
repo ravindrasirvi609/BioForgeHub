@@ -32,7 +32,6 @@ const OrderSchema = new Schema({
   razorpayId: {
     type: String,
     required: true,
-    unique: true,
   },
   totalAmount: {
     type: String,
