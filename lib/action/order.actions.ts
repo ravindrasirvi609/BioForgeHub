@@ -56,8 +56,11 @@ export const createOrder = async (order: any) => {
       event: order.eventId,
       buyer: order.buyerId,
     });
+    console.log("order.userId", order.buyerId);
+    
 
-    const user = await User.findById(order.userId);
+    const user = await User.findById(order.buyerId);
+console.log('user', user);
 
     await Event.findByIdAndUpdate(order.eventId, {
       $push: {
