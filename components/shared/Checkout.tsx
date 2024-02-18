@@ -32,6 +32,12 @@ const Checkout: React.FC<CheckoutProps> = ({ event, userId }) => {
 
   const onCheckout = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (event.isFree) {
+      alert("Checkout has already been initialized");
+      setError("Checkout is not available for free events");
+      return;
+    }
 
     if (!paymentInitialized) {
       setError("Payment gateway is not available at the moment");
@@ -70,11 +76,11 @@ const Checkout: React.FC<CheckoutProps> = ({ event, userId }) => {
             currency: data.currency,
             eventId: event._id,
             buyerId: userId,
-            createdAt: Date,
+            createdAt: new Date(),
             status: "success",
           };
           console.log("Order:", order);
-          
+
           const newOrder = await createOrder(order);
           console.log("Order created:", newOrder);
         },
@@ -96,13 +102,11 @@ const Checkout: React.FC<CheckoutProps> = ({ event, userId }) => {
   return (
     <form onSubmit={onCheckout}>
       {paymentInitialized && (
-        <>
-          <Button type="submit" role="link" size="lg" className="button sm:w-fit">
-            {event.isFree ? "Get Ticket" : "Buy Ticket"}
-          </Button>
-          {error && <p>{error}</p>}
-        </>
+        <Button type="submit" role="link" size="lg" className="button sm:w-fit">
+          {event.isFree ? "Get Ticket" : "Buy Ticket"}
+        </Button>
       )}
+      {error && <p>{error}</p>}
     </form>
   );
 };
