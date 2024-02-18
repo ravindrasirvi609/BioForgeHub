@@ -14,6 +14,7 @@ import { connectToDatabase } from "../database";
 import { handleError } from "../utils";
 import Category from "../database/models/category.model";
 import User from "../database/models/user.model";
+import { auth } from "@clerk/nextjs";
 
 const getCategoryByName = async (name: string) => {
   return Category.findOne({ name: { $regex: name, $options: "i" } });
@@ -58,14 +59,28 @@ export async function getEventById(eventId: string) {
     await connectToDatabase();
 
     const event = await populateEvent(Event.findById(eventId));
-
     if (!event) throw new Error("Event not found");
+
+    const { sessionClaims } = auth();
+    const userId = sessionClaims?.["userId "] as string;
+
+    if (userId) {
+      const trimmedUserId = userId.trim(); // Trim userId
+      const isJoined = event.joinedUsers?.some(
+        (user: { _id: string }) => user._id === trimmedUserId
+      );
+      if (isJoined !== undefined) {
+        event.isJoined = isJoined; // Set isJoined directly
+      }
+    }
 
     return JSON.parse(JSON.stringify(event));
   } catch (error) {
-    handleError(error);
+    handleError(error); // Ensure error is handled consistently
+    throw error; // Rethrow error after handling
   }
 }
+
 
 // UPDATE
 export async function updateEvent({ userId, event, path }: UpdateEventParams) {
