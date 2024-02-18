@@ -42,8 +42,7 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
     //   success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/profile`,
     //   cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
     // });
-
-   // redirect(session.url!);
+    // redirect(session.url!);
   } catch (error) {
     throw error;
   }
@@ -51,15 +50,23 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
 
 export const createOrder = async (order: any) => {
   try {
-    console.log("order ************", order);
-
     await connectToDatabase();
-console.log("order ************", order);
-
     const newOrder = await Order.create({
       ...order,
       event: order.eventId,
       buyer: order.buyerId,
+    });
+
+    const user = await User.findById(order.userId);
+
+    await Event.findByIdAndUpdate(order.eventId, {
+      $push: {
+        joinedUsers: {
+          _id: order.buyerId,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      },
     });
 
     return JSON.parse(JSON.stringify(newOrder));
