@@ -13,6 +13,7 @@ const EventDetails = async ({
   searchParams,
 }: SearchParamProps) => {
   const event = await getEventById(id);
+  console.log("event", event);
 
   const relatedEvents = await getRelatedEventsByCategory({
     categoryId: event.category._id,
@@ -54,7 +55,6 @@ const EventDetails = async ({
                 </p>
               </div>
             </div>
-
             {!event.isJoined && <CheckoutButton event={event} />}
 
             <div className="flex flex-col gap-5">

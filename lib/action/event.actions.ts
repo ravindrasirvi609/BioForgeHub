@@ -69,6 +69,8 @@ export async function getEventById(eventId: string) {
       const isJoined = event.joinedUsers?.some(
         (user: { _id: string }) => user._id === trimmedUserId
       );
+      console.log("isJoined --------", isJoined);
+      
       if (isJoined !== undefined) {
         event.isJoined = isJoined; // Set isJoined directly
       }

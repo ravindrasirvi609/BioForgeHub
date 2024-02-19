@@ -32,9 +32,9 @@ const Checkout: React.FC<CheckoutProps> = ({ event, userId }) => {
 
   const onCheckout = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (event.isFree) {
-      alert("Checkout has already been initialized");
+      alert("Successfully Joining the Confirmation Event");
       const order = {
         razorpayId: "FREE",
         totalAmount: 0,
