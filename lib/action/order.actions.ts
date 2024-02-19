@@ -1,6 +1,5 @@
 "use server";
 
-// import Stripe from "stripe";
 import {
   CheckoutOrderParams,
   CreateOrderParams,
@@ -14,6 +13,7 @@ import Order from "../database/models/order.model";
 import Event from "../database/models/event.model";
 import { ObjectId } from "mongodb";
 import User from "../database/models/user.model";
+import { revalidatePath } from "next/cache";
 
 export const checkoutOrder = async (order: CheckoutOrderParams) => {
   // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -56,12 +56,7 @@ export const createOrder = async (order: any) => {
       event: order.eventId,
       buyer: order.buyerId,
     });
-    console.log("order.userId", order.buyerId);
-    
-
     const user = await User.findById(order.buyerId);
-console.log('user', user);
-
     await Event.findByIdAndUpdate(order.eventId, {
       $push: {
         joinedUsers: {
@@ -71,7 +66,7 @@ console.log('user', user);
         },
       },
     });
-
+    revalidatePath("/");
     return JSON.parse(JSON.stringify(newOrder));
   } catch (error) {
     handleError(error);

@@ -63,28 +63,21 @@ export async function getEventById(eventId: string) {
 
     const { sessionClaims } = auth();
     const userId = sessionClaims?.["userId "] as string;
-    console.log("userId", userId, "sessionClaims");
 
     if (userId) {
       const trimmedUserId = userId.trim(); // Trim userId
-      console.log("trimmedUserId", trimmedUserId);
-      console.log("event.joinedUsers", event.joinedUsers);
-
-      // Check if any user in event.joinedUsers has the same _id as trimmedUserId
       const isJoined = event.joinedUsers?.some(
         (user: { toString: () => string }) => user.toString() === trimmedUserId
       );
-      console.log("isJoined --------", isJoined);
-
       if (isJoined !== undefined) {
-        event.isJoined = isJoined; // Set isJoined directly
+        event.isJoined = isJoined;
       }
     }
 
     return JSON.parse(JSON.stringify(event));
   } catch (error) {
-    handleError(error); // Ensure error is handled consistently
-    throw error; // Rethrow error after handling
+    handleError(error);
+    throw error;
   }
 }
 

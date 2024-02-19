@@ -55,7 +55,13 @@ const EventDetails = async ({
                 </p>
               </div>
             </div>
+
             {!event.isJoined && <CheckoutButton event={event} />}
+            {event.isJoined && (
+              <p className="p-medium-16 lg:p-regular-18 text-green-500">
+                You have already joined this event
+              </p>
+            )}
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
